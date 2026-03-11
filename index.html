@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>emerge. music academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:   #0a0a0a;
+    --near:    #111111;
+    --surface: #161616;
+    --line:    rgba(240,236,228,0.1);
+    --cream:   #f0ece4;
+    --cream2:  #d8d4cc;
+    --muted:   rgba(240,236,228,0.45);
+    --dot:     #f0ece4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--black);
+    color: var(--cream);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.4rem 5%;
+    border-bottom: 1px solid var(--line);
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(16px);
+  }
+  .nav-logo {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.55rem; font-weight: 900;
+    color: var(--cream); text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+  .nav-links a {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-cta {
+    background: var(--cream) !important; color: var(--black) !important;
+    padding: 0.65rem 1.4rem; border-radius: 100px;
+    font-size: 0.78rem !important; font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 5% 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+    width: 100%; height: 80%;
+    background: radial-gradient(ellipse 60% 60% at 50% 30%, rgba(240,236,228,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-bg-word {
+    position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(14vw, 20vw, 260px);
+    font-weight: 900; letter-spacing: -0.04em;
+    color: rgba(240,236,228,0.025);
+    white-space: nowrap; pointer-events: none;
+    user-select: none; line-height: 1;
+  }
+  .hero-inner {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: flex-end; gap: 4rem;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--line); border-radius: 100px;
+    padding: 0.4rem 0.9rem; margin-bottom: 2rem;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--cream2);
+  }
+  .hero-badge::before {
+    content: ''; display: inline-block;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cream); flex-shrink: 0;
+  }
+  h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(3.2rem, 6vw, 6rem);
+    font-weight: 900; line-height: 1.0;
+    letter-spacing: -0.03em; color: var(--cream);
+    margin-bottom: 1.6rem;
+  }
+  h1 .light { font-weight: 300; }
+  .hero-sub {
+    font-size: 1rem; line-height: 1.75;
+    color: var(--muted); max-width: 420px;
+    font-weight: 400; margin-bottom: 2.4rem;
+  }
+  .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--cream); color: var(--black);
+    padding: 0.9rem 2rem; border-radius: 100px;
+    font-size: 0.82rem; font-weight: 800; letter-spacing: 0.06em;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #fff; transform: translateY(-2px); }
+  .btn-ghost {
+    border: 1px solid var(--line); color: var(--cream2);
+    padding: 0.9rem 2rem; border-radius: 100px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(240,236,228,0.4); color: var(--cream); }
+  .hero-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--line); border: 1px solid var(--line);
+    border-radius: 12px; overflow: hidden;
+  }
+  .stat-box {
+    background: var(--surface); padding: 2rem 1.6rem;
+    transition: background 0.2s;
+  }
+  .stat-box:hover { background: #1c1c1c; }
+  .stat-big {
+    font-family: 'Nunito', sans-serif;
+    font-size: 3rem; font-weight: 900; letter-spacing: -0.04em;
+    color: var(--cream); line-height: 1; margin-bottom: 0.3rem;
+  }
+  .stat-label { font-size: 0.7rem; color: var(--muted); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    overflow: hidden; background: var(--near); padding: 1rem 0;
+    position: relative; z-index: 10;
+  }
+  .marquee-track {
+    display: flex; white-space: nowrap;
+    animation: marquee 30s linear infinite;
+  }
+  .marquee-item {
+    display: inline-flex; align-items: center; gap: 1.5rem;
+    padding: 0 2.5rem;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+    flex-shrink: 0;
+  }
+  .marquee-item::after { content: '◆'; font-size: 0.35rem; color: rgba(240,236,228,0.2); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* SHARED */
+  section { padding: 6rem 5%; position: relative; z-index: 1; }
+  .label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 1.2rem; display: block;
+  }
+  h2 {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -0.03em; color: var(--cream);
+    margin-bottom: 1rem;
+  }
+  h2 .light { font-weight: 300; }
+  .intro {
+    font-size: 1rem; color: var(--muted); line-height: 1.75;
+    max-width: 520px; font-weight: 400;
+  }
+
+  /* BENEFITS */
+  .benefits { background: var(--near); }
+  .benefits-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem;
+  }
+  .benefits-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  }
+  .ben {
+    background: var(--surface); padding: 2rem 1.6rem;
+    transition: background 0.25s;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .ben:hover { background: #1c1c1c; }
+  .ben-num {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+    color: rgba(240,236,228,0.2); text-transform: uppercase;
+  }
+  .ben-icon { font-size: 1.6rem; }
+  .ben h3 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem; font-weight: 800; letter-spacing: -0.01em;
+    color: var(--cream); line-height: 1.2;
+  }
+  .ben p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* RSL */
+  .rsl { background: var(--black); }
+  .rsl-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center; margin-top: 4rem;
+  }
+  .rsl-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .rsl-list li {
+    display: flex; align-items: flex-start; gap: 1rem;
+    font-size: 0.88rem; color: var(--cream2); line-height: 1.55;
+  }
+  .tick {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; flex-shrink: 0; margin-top: 0.1rem;
+    color: var(--cream);
+  }
+  .rsl-panel {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 3rem; position: relative; overflow: hidden;
+  }
+  .rsl-panel::before {
+    content: 'RSL';
+    position: absolute; bottom: -1rem; right: 1rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 9rem; font-weight: 900; letter-spacing: -0.04em;
+    color: rgba(240,236,228,0.04); pointer-events: none; line-height: 1;
+  }
+  .rsl-panel h3 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.6rem; font-weight: 900; letter-spacing: -0.02em;
+    color: var(--cream); margin-bottom: 0.8rem;
+  }
+  .rsl-panel p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .rsl-tag {
+    display: inline-block;
+    background: rgba(240,236,228,0.07); border: 1px solid var(--line);
+    border-radius: 100px; padding: 0.4rem 0.9rem;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--cream2);
+  }
+
+  /* HOW */
+  .how { background: var(--near); }
+  .steps {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; margin-top: 4rem;
+  }
+  .step { background: var(--surface); padding: 2.5rem 2rem; position: relative; }
+  .step-num {
+    font-family: 'Nunito', sans-serif;
+    font-size: 4.5rem; font-weight: 900; letter-spacing: -0.04em;
+    color: rgba(240,236,228,0.06); line-height: 1; margin-bottom: 1.5rem;
+  }
+  .step h3 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem; font-weight: 800; color: var(--cream);
+    margin-bottom: 0.6rem; letter-spacing: -0.01em;
+  }
+  .step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+  .step-arrow {
+    position: absolute; top: 2.5rem; right: 1.5rem;
+    font-size: 0.8rem; color: rgba(240,236,228,0.15);
+  }
+
+  /* INSTRUMENTS */
+  .instruments { background: var(--black); }
+  .instruments-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; margin-top: 4rem;
+  }
+  .instr {
+    background: var(--surface); padding: 2rem 1rem;
+    text-align: center; transition: background 0.2s; cursor: default;
+  }
+  .instr:hover { background: #1c1c1c; }
+  .instr-icon { font-size: 2rem; display: block; margin-bottom: 0.7rem; }
+  .instr-name { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cream2); }
+
+  /* PRICING */
+  .pricing { background: var(--near); }
+  .pricing-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: 1.5rem; margin-top: 4rem;
+  }
+  .price-main {
+    background: var(--cream); color: var(--black);
+    border-radius: 12px; padding: 3rem;
+    position: relative; overflow: hidden;
+  }
+  .price-main::before {
+    content: '£';
+    position: absolute; bottom: -2rem; right: 1rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12rem; font-weight: 900;
+    color: rgba(10,10,10,0.07); line-height: 1; pointer-events: none;
+  }
+  .price-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(10,10,10,0.45);
+    margin-bottom: 1rem; display: block;
+  }
+  .price-amount {
+    font-family: 'Nunito', sans-serif;
+    font-size: 4.5rem; font-weight: 900; letter-spacing: -0.04em;
+    color: var(--black); line-height: 1; margin-bottom: 0.3rem;
+    display: flex; align-items: flex-start; gap: 0.2rem;
+  }
+  .currency { font-size: 2rem; font-weight: 300; margin-top: 0.7rem; }
+  .price-per { font-size: 0.78rem; color: rgba(10,10,10,0.5); margin-bottom: 2rem; font-weight: 600; }
+  .price-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .price-list li {
+    font-size: 0.87rem; color: rgba(10,10,10,0.75);
+    display: flex; align-items: flex-start; gap: 0.7rem; line-height: 1.4; font-weight: 600;
+  }
+  .price-list li::before { content: '✓'; font-weight: 900; color: var(--black); flex-shrink: 0; }
+  .price-info { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .info-cell {
+    background: var(--surface); padding: 2rem;
+    flex: 1; transition: background 0.2s;
+  }
+  .info-cell:hover { background: #1c1c1c; }
+  .info-cell h4 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem; font-weight: 800; color: var(--cream);
+    margin-bottom: 0.5rem; letter-spacing: -0.01em;
+  }
+  .info-cell p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* CTA */
+  .cta { background: var(--cream); color: var(--black); text-align: center; padding: 7rem 5%; position: relative; overflow: hidden; }
+  .cta::before {
+    content: 'emerge.';
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(10vw, 14vw, 180px);
+    font-weight: 900; letter-spacing: -0.04em;
+    color: rgba(10,10,10,0.05); white-space: nowrap; pointer-events: none;
+  }
+  .cta .label { color: rgba(10,10,10,0.4); }
+  .cta h2 { color: var(--black); font-size: clamp(2.4rem, 5vw, 5rem); }
+  .cta p { color: rgba(10,10,10,0.55); max-width: 440px; margin: 0 auto 2.5rem; font-size: 1rem; line-height: 1.7; }
+  .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 2; }
+  .btn-dark {
+    background: var(--black); color: var(--cream);
+    padding: 1rem 2.4rem; border-radius: 100px;
+    font-size: 0.85rem; font-weight: 800; letter-spacing: 0.06em;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-dark:hover { background: #1a1a1a; transform: translateY(-2px); }
+  .btn-ghost-dark {
+    border: 1.5px solid rgba(10,10,10,0.2); color: var(--black);
+    padding: 1rem 2.4rem; border-radius: 100px;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-ghost-dark:hover { border-color: var(--black); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black); padding: 2rem 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .footer-logo {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.3rem; font-weight: 900;
+    letter-spacing: -0.02em; color: var(--cream);
+    text-decoration: none;
+  }
+  footer p { font-size: 0.72rem; color: var(--muted); }
+
+  /* ANIMATIONS */
+  @keyframes up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-badge { opacity: 0; animation: up 0.6s 0.1s ease forwards; }
+  .hero-left h1 { opacity: 0; animation: up 0.7s 0.25s ease forwards; }
+  .hero-sub { opacity: 0; animation: up 0.6s 0.4s ease forwards; }
+  .hero-actions { opacity: 0; animation: up 0.6s 0.55s ease forwards; }
+  .hero-stats { opacity: 0; animation: up 0.7s 0.5s ease forwards; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .benefits-grid { grid-template-columns: repeat(3, 1fr); }
+    .instruments-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .hero-inner, .rsl-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .hero-inner { gap: 3rem; }
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .benefits-grid { grid-template-columns: 1fr 1fr; }
+    .instruments-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">emerge.</a>
+  <div class="nav-links">
+    <a href="#benefits">Why Emerge</a>
+    <a href="#how">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#enrol" class="nav-cta">Enrol Now</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-word">emerge.</div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">RSL Awards Accredited · Ages 5–18</div>
+      <h1>Music that<br><span class="light">builds</span><br>something real.</h1>
+      <p class="hero-sub">Professional group music classes for children and teens. RSL syllabus-led, subscription-based, and designed to take your child from beginner to confident performer.</p>
+      <div class="hero-actions">
+        <a href="#enrol" class="btn-primary">Enrol Now</a>
+        <a href="#how" class="btn-ghost">How it works</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-big">50</div>
+        <div class="stat-label">Min classes</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-big">RSL</div>
+        <div class="stat-label">Accredited</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-big">3mo</div>
+        <div class="stat-label">Min term</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-big">14d</div>
+        <div class="stat-label">Cooling off</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">RSL Awards Syllabus</span>
+    <span class="marquee-item">Group Classes</span>
+    <span class="marquee-item">Guitar · Piano · Drums · Vocals</span>
+    <span class="marquee-item">Ages 5–18</span>
+    <span class="marquee-item">Graded Exams</span>
+    <span class="marquee-item">Monthly Subscription</span>
+    <span class="marquee-item">Performance Opportunities</span>
+    <span class="marquee-item">emerge. music academy</span>
+    <span class="marquee-item">RSL Awards Syllabus</span>
+    <span class="marquee-item">Group Classes</span>
+    <span class="marquee-item">Guitar · Piano · Drums · Vocals</span>
+    <span class="marquee-item">Ages 5–18</span>
+    <span class="marquee-item">Graded Exams</span>
+    <span class="marquee-item">Monthly Subscription</span>
+    <span class="marquee-item">Performance Opportunities</span>
+    <span class="marquee-item">emerge. music academy</span>
+  </div>
+</div>
+
+<section class="benefits" id="benefits">
+  <div class="benefits-header">
+    <div>
+      <span class="label">Why Emerge</span>
+      <h2>More than lessons.<br><span class="light">A foundation.</span></h2>
+    </div>
+    <p class="intro">Learning music at Emerge Academy builds skills that transfer far beyond the classroom — confidence, discipline, and the ability to perform under pressure.</p>
+  </div>
+  <div class="benefits-grid">
+    <div class="ben">
+      <div class="ben-num">01</div>
+      <div class="ben-icon">🎓</div>
+      <h3>Recognised Progress</h3>
+      <p>RSL graded qualifications your child earns and keeps — a track record that follows them for life.</p>
+    </div>
+    <div class="ben">
+      <div class="ben-num">02</div>
+      <div class="ben-icon">🌟</div>
+      <h3>Genuine Confidence</h3>
+      <p>Performing, achieving, and being heard — the kind of confidence that transforms children everywhere, not just on stage.</p>
+    </div>
+    <div class="ben">
+      <div class="ben-num">03</div>
+      <div class="ben-icon">🎯</div>
+      <h3>Discipline & Focus</h3>
+      <p>Music teaches children how to practise, persist, and achieve — skills that directly support academic and personal growth.</p>
+    </div>
+    <div class="ben">
+      <div class="ben-num">04</div>
+      <div class="ben-icon">🤝</div>
+      <h3>Group Energy</h3>
+      <p>Small groups keep sessions engaging and social, while ensuring every child receives personal feedback each week.</p>
+    </div>
+    <div class="ben">
+      <div class="ben-num">05</div>
+      <div class="ben-icon">🎤</div>
+      <h3>Stage-Ready Skills</h3>
+      <p>We prepare children to perform — not just play. From grade exams to recitals, they step forward with real ability.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rsl" id="rsl">
+  <span class="label">The Syllabus</span>
+  <h2>Why RSL Awards<br><span class="light">matters.</span></h2>
+  <div class="rsl-grid">
+    <div>
+      <p class="intro">RSL Awards is one of the UK's most respected music qualifications bodies — used in schools, conservatoires, and music centres across the country.</p>
+      <ul class="rsl-list">
+        <li><span class="tick">✓</span>Ofqual-regulated, internationally recognised qualifications</li>
+        <li><span class="tick">✓</span>Repertoire across classical, contemporary, rock, and pop</li>
+        <li><span class="tick">✓</span>Structured grades from Initial through to Grade 8</li>
+        <li><span class="tick">✓</span>Performance, theory, and technical skills developed together</li>
+        <li><span class="tick">✓</span>Grade certificates as tangible proof of achievement</li>
+      </ul>
+    </div>
+    <div class="rsl-panel">
+      <h3>A syllabus built for the real world.</h3>
+      <p>Unlike school music lessons, our RSL pathway gives every child a clear progression route — from their very first note to a nationally recognised grade certificate. Every lesson is purposeful. Every term moves them forward.</p>
+      <span class="rsl-tag">Ofqual Regulated</span>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <span class="label">How It Works</span>
+  <h2>Simple to start.<br><span class="light">Built to progress.</span></h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <span class="step-arrow">→</span>
+      <h3>Choose Your Instrument</h3>
+      <p>Select from our available instruments. Not sure? We'll help match your child's personality to the perfect fit.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <span class="step-arrow">→</span>
+      <h3>Pick a Class Time</h3>
+      <p>Browse available 50-minute group sessions for your child's age and ability. All classes are taught by qualified tutors.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <span class="step-arrow">→</span>
+      <h3>Subscribe & Enrol</h3>
+      <p>Simple monthly subscription, 3-month minimum, and a full 14-day cooling-off period for complete peace of mind.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Watch Them Emerge</h3>
+      <p>Each term, your child progresses through the RSL syllabus — building real skills, earning grades, and gaining the confidence to perform.</p>
+    </div>
+  </div>
+</section>
+
+<section class="instruments" id="instruments">
+  <span class="label">Instruments Offered</span>
+  <h2>Find their<br><span class="light">sound.</span></h2>
+  <div class="instruments-grid">
+    <div class="instr"><span class="instr-icon">🎸</span><span class="instr-name">Guitar</span></div>
+    <div class="instr"><span class="instr-icon">🎹</span><span class="instr-name">Piano</span></div>
+    <div class="instr"><span class="instr-icon">🥁</span><span class="instr-name">Drums</span></div>
+    <div class="instr"><span class="instr-icon">🎤</span><span class="instr-name">Vocals</span></div>
+    <div class="instr"><span class="instr-icon">🎻</span><span class="instr-name">Violin</span></div>
+    <div class="instr"><span class="instr-icon">🎺</span><span class="instr-name">Brass</span></div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <span class="label">Subscription</span>
+  <h2>Straightforward<br><span class="light">pricing.</span></h2>
+  <div class="pricing-grid">
+    <div class="price-main">
+      <span class="price-label">Monthly Subscription — From</span>
+      <div class="price-amount"><span class="currency">£</span>[XX]</div>
+      <p class="price-per">per month · billed monthly · 3-month minimum</p>
+      <ul class="price-list">
+        <li>Weekly 50-minute group class</li>
+        <li>RSL Awards syllabus-led tuition</li>
+        <li>Regular progress feedback</li>
+        <li>Emerge Academy resources & materials</li>
+        <li>Termly performance opportunities</li>
+        <li>Grade exam preparation included</li>
+      </ul>
+    </div>
+    <div class="price-info">
+      <div class="info-cell">
+        <h4>14-Day Cooling-Off Period</h4>
+        <p>Enrol with complete confidence. If you change your mind within 14 days, you'll receive a full refund — no questions asked.</p>
+      </div>
+      <div class="info-cell">
+        <h4>3-Month Commitment</h4>
+        <p>Musical progress takes time. Our 3-month minimum gives your child the runway they need to see real results.</p>
+      </div>
+      <div class="info-cell">
+        <h4>Flexible After That</h4>
+        <p>After the initial term, your subscription rolls monthly. Pause or cancel with notice — always transparent, never complicated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="enrol">
+  <span class="label">Get Started</span>
+  <h2>Your child's<br>moment to emerge.</h2>
+  <p>Spaces in our group classes are limited. Secure your child's place now and give them a skill — and a confidence — that will last a lifetime.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-dark">Enrol Now</a>
+    <a href="#" class="btn-ghost-dark">Ask a Question</a>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="footer-logo">emerge.</a>
+  <p>music academy · RSL Awards Accredited</p>
+  <p>© 2025 Emerge Music Academy</p>
+</footer>
+
+</body>
+</html>
